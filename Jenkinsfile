@@ -5,13 +5,12 @@ pipeline {
         NEW_VERSION = '1.2.1'
         CRED = credentials('server-cred-id') // for using credentials from jenkins server
     }
+    parameters{
+        choice(name: 'Version', choices:['1.2.1','1.2.3'],description:'')
+        booleanParam(name: 'executeTests', defaultValue: true, description:'')
+    }
     stages {
         stage("build"){
-            when {
-                expression {
-                    BRANCH_NAME == 'main' //&& CODE_CHANGES ==true
-                }
-            }
             steps{
                 echo "building app"
                 echo "building version ${NEW_VERSION}"
@@ -21,7 +20,7 @@ pipeline {
         stage("test"){
             when{
                 expression {
-                    BRANCH_NAME == 'main'
+                    params.executeTests
                 }
             }
             steps{
@@ -31,9 +30,8 @@ pipeline {
 
         stage("deploy"){
             steps{
-                echo "deploying app ..."
+                echo "deploying app version ${params.Version}..."
                 echo "deploying with ${CRED}"
-                sh "${CRED}"
             }
         }
     }

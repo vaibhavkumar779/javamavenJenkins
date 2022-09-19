@@ -1,4 +1,3 @@
-//CODE_CHANGES = getGitChange()
 pipeline {
     agent any
     parameters{
@@ -42,17 +41,5 @@ pipeline {
                 
             }
         }
-    }
-}
-
-post {
-    always{
-        //
-    }
-    success{
-        //
-    }
-    failure{
-        //
     }
 }

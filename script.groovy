@@ -8,7 +8,7 @@ def test(){
 
 def deploy(){
     echo "deploying app version ${params.Version}..."
-                echo "deploying with ${CRED_USER}"
+    echo "deploying application ..."
 }
 
 return this

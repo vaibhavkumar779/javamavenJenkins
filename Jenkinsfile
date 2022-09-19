@@ -1,10 +1,6 @@
 //CODE_CHANGES = getGitChange()
 pipeline {
     agent any
-    environment{
-        NEW_VERSION = '1.2.1'
-        CRED = credentials('server-cred-id') // for using credentials from jenkins server
-    }
     parameters{
         choice(name: 'Version', choices:['1.2.1','1.2.3'],description:'')
         booleanParam(name: 'executeTests', defaultValue: true, description:'')
@@ -22,7 +18,6 @@ pipeline {
                 script{
                     gv.buildApp()
                 }
-                echo "building version ${NEW_VERSION}"
             }
         }
 

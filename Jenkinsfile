@@ -3,7 +3,7 @@ pipeline {
     agent any
     environment{
         NEW_VERSION = '1.2.1'
-        CREDENTIALS = credentials('server-cred-id') // for using credentials from jenkins server
+        CRED = credentials('server-cred-id') // for using credentials from jenkins server
     }
     stages {
         stage("build"){
@@ -32,8 +32,8 @@ pipeline {
         stage("deploy"){
             steps{
                 echo "deploying app ..."
-                echo "deploying with ${CREDENTIALS}"
-                sh "${CREDENTIALS}"
+                echo "deploying with ${CRED}"
+                sh "${CRED}"
             }
         }
     }

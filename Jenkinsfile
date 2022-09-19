@@ -1,53 +1,36 @@
 pipeline {
     agent any
-    parameters{
-        choice(name: 'Version', choices:['1.2.1','1.2.3'],description:'')
-        booleanParam(name: 'executeTests', defaultValue: true, description:'')
+    tools {
+        maven 'maven-3.6'
     }
     stages {
-        stage("init") {
+        stage("build jar") {
             steps {
                 script {
-                    gv = load "script.groovy"
-                }
-            }
-        }
-        stage("build"){
-            steps{
-                script{
-                    gv.build()
+                    echo "building application ..."
+                    sh 'mvn package'
                 }
             }
         }
 
-        stage("test"){
-            when{
-                expression {
-                    params.executeTests
-                }
-            }
-            steps{
-                script {
-                    gv.test()
-                }
-            }
-        }
+        // stage("build docker image") {
+        //     steps {
+        //         script {
+        //             echo "building the docker image"
+        //             withCredentials([usernamePassword(credentialsId: 'docker-cred', passwordVariable: 'PASS', usernameVariable:'USER')]){
+        //                 sh 'docker build -t vaibhavkuma779/demo2jenkins:veriontest-2.0'
+        //                 sh "echo $PASS | docker login -u $USER --password-stdin"
+        //                 sh 'docker push vaibhavkuma779/demo2jenkins:versiontest-2.0'
+        //             }
+        //         }
+        //     }
+        // }
 
-        stage("deploy"){
-            input {
-                message "Select the environment to deploy"
-                ok "Done"
-                parameters {
-                    choice(name: 'ENV_one', choices:['dev','staging','prod'],description:'')
-                    choice(name: 'ENV_two', choices:['dev','staging','prod'],description:'')
-                }
-            }
-            steps{
+        stage("deploy") {
+            steps {
                 script {
-                    gv.deploy()
-                    echo "deplying for environments ${ENV_one} and ${ENV_two}"
+                    echo "deploying application ..."
                 }
-                
             }
         }
     }

@@ -1,0 +1,15 @@
+pipeline{
+    agent any
+    stages {
+        stage("copy files to ansible server"){
+            steps{
+                script{
+                    echo "copying files all necessary files"
+                    sshagent(['ansible.pem']){
+                        sh "scp -o StrictHostKeyChecking=no ansible/* 13.235.68.162:/home/ubuntu/"
+                    }
+                }
+            }
+        }
+    }
+}
